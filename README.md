@@ -1,2 +1,1 @@
-# Origin-store
-Origin store
+# Origin Store
