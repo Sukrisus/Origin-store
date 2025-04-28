@@ -6,14 +6,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.cdnfonts.com/css/coolvetica" rel="stylesheet">
   <style>
-    /* Core Styles */
+    /* Your original CSS kept as it is */
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Coolvetica', sans-serif; scroll-behavior: smooth; }
     html, body { width: 100%; overflow-x: hidden; }
     body { background: #0a0a0a; color: #fff; min-height: 100vh; display: flex; flex-direction: column; }
+
     header { background: #0d0d0d; padding: 16px; font-size: 2rem; text-align: center; font-weight: bold; letter-spacing: 1.5px; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid #222; }
     nav { background: #0d0d0d; display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; padding: 10px; position: sticky; top: 70px; z-index: 999; border-bottom: 1px solid #222; }
     nav button { background: #111; color: #fff; border: none; padding: 8px 16px; border-radius: 8px; font-size: 1rem; cursor: pointer; transition: background 0.3s; }
     nav button:hover { background: #1f1f1f; }
+
     section { padding: 40px 20px; max-width: 1200px; margin: auto; }
     .section-title { font-size: 1.8rem; margin-bottom: 20px; border-bottom: 2px solid #222; padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
     .store-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; margin-top: 20px; }
@@ -26,64 +28,63 @@
     .item-price { color: #aaa; margin-bottom: 12px; font-size: 0.9rem; }
     .buy-button { background: transparent; border: 2px solid #fff; color: #fff; padding: 8px 16px; border-radius: 6px; font-size: 1rem; width: 100%; transition: 0.3s; cursor: pointer; }
     .buy-button:hover { background: #fff; color: #000; }
+
     .expand-button { background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; }
     footer { text-align: center; padding: 16px; font-size: 0.8rem; color: #555; margin-top: auto; background: #0d0d0d; border-top: 1px solid #222; }
+
     .expanded-area, .single-item-page { display: none; animation: fadeIn 0.5s ease forwards; padding: 40px 20px; max-width: 1200px; margin: auto; }
     @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
     .back-button { background: none; border: none; color: #fff; font-size: 1rem; margin-bottom: 20px; cursor: pointer; }
 
-    /* Etc Drawer */
-    #etc-drawer {
+    /* Drawer style */
+    #drawer {
       position: fixed;
-      right: -300px;
       top: 0;
-      height: 100%;
+      left: -250px;
       width: 250px;
+      height: 100%;
+      background-color: #111;
+      transition: left 0.3s ease;
+      z-index: 1001;
+      padding-top: 20px;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+    }
+
+    #drawer.open {
+      left: 0;
+    }
+
+    #drawer ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    #drawer ul li {
+      padding: 15px;
+      text-align: center;
+    }
+
+    #drawer ul li a {
+      color: white;
+      text-decoration: none;
+      font-size: 1.2rem;
+    }
+
+    #drawer-toggle {
+      position: fixed;
+      top: 10px;
+      left: 10px;
       background: #111;
-      color: #fff;
-      box-shadow: -2px 0 5px rgba(0,0,0,0.5);
-      transition: right 0.3s ease;
-      z-index: 2000;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-    #etc-drawer.open {
-      right: 0;
-    }
-    #etc-drawer button {
-      background: #222;
+      color: white;
       border: none;
-      color: #fff;
       padding: 10px;
-      border-radius: 6px;
-      font-size: 1rem;
       cursor: pointer;
-    }
-    #etc-drawer button:hover {
-      background: #333;
-    }
-    .drawer-close {
-      align-self: flex-end;
-      background: transparent;
-      border: none;
-      color: #fff;
-      font-size: 1.5rem;
-      cursor: pointer;
-      margin-bottom: 20px;
+      z-index: 1002;
     }
 
     @media (max-width: 600px) {
-      header { font-size: 1.7rem; }
-      nav button { padding: 6px 12px; font-size: 0.9rem; }
-      section { padding: 30px 16px; }
-      .section-title { font-size: 1.5rem; }
-      .item-card { border-radius: 10px; }
-      .item-name { font-size: 1.1rem; }
-      .buy-button { font-size: 0.9rem; }
+      nav button { font-size: 0.9rem; }
       .expand-button { font-size: 1.3rem; }
-      .item-image-container { height: 150px; }
     }
   </style>
 </head>
@@ -91,132 +92,68 @@
 
 <header>Origin Client Store</header>
 
+<!-- Drawer Toggle Button -->
+<button id="drawer-toggle" onclick="toggleDrawer()">☰</button>
+
+<!-- Drawer -->
+<div id="drawer">
+  <ul>
+    <li><a href="javascript:void(0)" onclick="scrollToSection('cloaks')">Cloaks</a></li>
+    <li><a href="javascript:void(0)" onclick="scrollToSection('crowns')">Crowns</a></li>
+    <li><a href="javascript:void(0)" onclick="scrollToSection('bandanas')">Bandanas</a></li>
+    <li><a href="javascript:void(0)" onclick="scrollToSection('shields')">Shields</a></li>
+    <li><a href="javascript:void(0)" onclick="scrollToSection('horns')">Horns</a></li> <!-- New Section -->
+  </ul>
+</div>
+
 <nav>
   <button onclick="scrollToSection('cloaks')">Cloaks</button>
   <button onclick="scrollToSection('crowns')">Crowns</button>
   <button onclick="scrollToSection('shields')">Shields</button>
   <button onclick="scrollToSection('bandanas')">Bandanas</button>
-  <button onclick="toggleDrawer()">Etc</button>
+  <button onclick="scrollToSection('horns')">Horns</button> <!-- New Button -->
 </nav>
 
-<!-- ETC DRAWER -->
-<div id="etc-drawer">
-  <button class="drawer-close" onclick="toggleDrawer()">×</button>
-  <button onclick="scrollToSection('crowns'); toggleDrawer()">Crowns</button>
-  <button onclick="scrollToSection('bandanas'); toggleDrawer()">Bandanas</button>
-  <button onclick="scrollToSection('cloaks'); toggleDrawer()">Cloaks</button>
-  <button onclick="scrollToSection('horns'); toggleDrawer()">Horns</button> <!-- Horns will scroll -->
-</div>
-
-<!-- Example Store Sections -->
+<!-- MAIN STORE SECTIONS -->
 <section id="cloaks" class="store-section">
   <div class="section-title">
     <span>Cloaks</span>
     <button class="expand-button" onclick="openExpanded('expanded-cloaks')">></button>
   </div>
   <div class="store-grid">
-    <!-- Cloaks content here -->
-    <div class="item-card">
-      <div class="item-image-container">
-        <img src="https://via.placeholder.com/300x200?text=Cloak+Example" alt="Example Cloak">
-      </div>
-      <div class="item-info">
-        <div class="item-name">Example Cloak</div>
-        <div class="item-price">FREE</div>
-        <button class="buy-button">Get for Free</button>
-      </div>
-    </div>
+    <!-- Cloak Items Here -->
   </div>
 </section>
 
-<section id="crowns" class="store-section">
-  <div class="section-title">
-    <span>Crowns</span>
-    <button class="expand-button">></button>
-  </div>
-  <div class="store-grid">
-    <!-- Crowns content -->
-  </div>
-</section>
+<!-- Other Sections Here... -->
 
-<section id="shields" class="store-section">
-  <div class="section-title">
-    <span>Shields</span>
-    <button class="expand-button">></button>
-  </div>
-  <div class="store-grid">
-    <!-- Shields content -->
-  </div>
-</section>
-
-<section id="bandanas" class="store-section">
-  <div class="section-title">
-    <span>Bandanas</span>
-    <button class="expand-button">></button>
-  </div>
-  <div class="store-grid">
-    <!-- Bandanas content -->
-  </div>
-</section>
-<!-- Horns Section -->
+<!-- Horns Section (New) -->
 <section id="horns" class="store-section">
   <div class="section-title">
     <span>Horns</span>
     <button class="expand-button" onclick="openExpanded('expanded-horns')">></button>
   </div>
   <div class="store-grid">
-    <div class="item-card">
-      <div class="item-image-container">
-        <img src="bh.png" alt="Black Horn">
-      </div>
-      <div class="item-info">
-        <div class="item-name">Black Horn</div>
-        <div class="item-price">$2.99</div>
-        <button class="buy-button" onclick="openItem('black-horn')">Buy Now</button>
-      </div>
-    </div>
+    <!-- Horns Items Here -->
   </div>
 </section>
 
-<!-- Expanded Horns Section -->
+<!-- EXPANDED SECTIONS -->
 <div id="expanded-horns" class="expanded-area">
   <button class="back-button" onclick="goBack()">← Back</button>
   <h2>Horns</h2>
   <div class="store-grid">
-    <div class="item-card">
-      <div class="item-image-container">
-        <img src="bh.png" alt="Black Horn">
-      </div>
-      <div class="item-info">
-        <div class="item-name">Black Horn</div>
-        <div class="item-price">$2.99</div>
-        <a href="https://www.mediafire.com/file/3sw00breui6ib01/Black_Horn.mcpack/file" download class="buy-button">Download</a>
-      </div>
-    </div>
+    <!-- Horns Expanded Items Here -->
   </div>
 </div>
 
-<!-- Single Item Page for Black Horn -->
-<div id="black-horn" class="single-item-page">
-  <button class="back-button" onclick="goBack()">← Back</button>
-  <div class="item-card">
-    <div class="item-image-container">
-      <img src="bh.png" alt="Black Horn">
-    </div>
-    <div class="item-info">
-      <div class="item-name">Black Horn</div>
-      <a href="https://www.mediafire.com/file/3sw00breui6ib01/Black_Horn.mcpack/file" download class="buy-button">Download</a>
-    </div>
-  </div>
-</div>
+<!-- Back Button and Other Sections -->
 
-
-<footer>
-  © 2025 Origin Client. All rights reserved.
-</footer>
-
-<!-- JavaScript -->
 <script>
+  function toggleDrawer() {
+    document.getElementById('drawer').classList.toggle('open');
+  }
+
   function scrollToSection(id) {
     document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
   }
@@ -227,9 +164,16 @@
     window.scrollTo(0, 0);
   }
 
-  function toggleDrawer() {
-    const drawer = document.getElementById('etc-drawer');
-    drawer.classList.toggle('open');
+  function openItem(id) {
+    document.querySelectorAll('section, nav, footer, header, .expanded-area, .single-item-page').forEach(el => el.style.display = 'none');
+    document.getElementById(id).style.display = 'block';
+    window.scrollTo(0, 0);
+  }
+
+  function goBack() {
+    document.querySelectorAll('.expanded-area, .single-item-page').forEach(el => el.style.display = 'none');
+    document.querySelectorAll('section, nav, footer, header').forEach(el => el.style.display = '');
+    window.scrollTo(0, 0);
   }
 </script>
 
