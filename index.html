@@ -42,67 +42,9 @@
       .expand-button { font-size: 1.3rem; }          
       .item-image-container { height: 150px; }          
     }          
-    /* Drawer styles */
-#drawer {
-  height: 100%;
-  width: 0;
-  position: fixed;
-  z-index: 1000;
-  top: 0;
-  left: 0;
-  background-color: #111;
-  overflow-x: hidden;
-  transition: 0.3s;
-  padding-top: 60px;
-  display: none;
-}
-
-#drawer a {
-  padding: 8px 16px;
-  text-decoration: none;
-  font-size: 1.2rem;
-  color: #fff;
-  display: block;
-  transition: 0.3s;
-}
-
-#drawer a:hover {
-  background-color: #575757;
-}
-
-#drawer-btn {
-  font-size: 2rem;
-  color: #fff;
-  cursor: pointer;
-  margin: 16px;
-}
-
-.drawer-close-btn {
-  font-size: 2rem;
-  color: #fff;
-  cursor: pointer;
-  position: absolute;
-  top: 20px;
-  left: 20px;
-}
   </style>          
 </head>          
-<body>       
-<!-- Drawer -->
-<div id="drawer">
-  <span class="drawer-close-btn" onclick="closeDrawer()">×</span>
-  <a href="javascript:void(0)" onclick="scrollToSection('cloaks')">Cloaks</a>
-  <a href="javascript:void(0)" onclick="scrollToSection('crowns')">Crowns</a>
-  <a href="javascript:void(0)" onclick="scrollToSection('shields')">Shields</a>
-  <a href="javascript:void(0)" onclick="scrollToSection('bandanas')">Bandanas</a>
-  <a href="javascript:void(0)" onclick="scrollToSection('horns')">Horns</a>
-  <a href="javascript:void(0)" onclick="scrollToSection('wings')">Wings</a>
-</div>
-
-<!-- Main Navigation -->
-<nav>
-  <button onclick="openDrawer()">☰</button>
-</nav>
+<body>          
           
 <header>Origin Client Store</header>          
           
@@ -323,22 +265,6 @@
 </footer>          
           
 <script>          
-// Open Drawer
-function openDrawer() {
-  document.getElementById("drawer").style.width = "250px";
-  document.getElementById("drawer").style.display = "block";
-}
-
-// Close Drawer
-function closeDrawer() {
-  document.getElementById("drawer").style.width = "0";
-  document.getElementById("drawer").style.display = "none";
-}
-
-// Scroll to specific section
-function scrollToSection(id) {
-  document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
-}
   function scrollToSection(id) {          
     document.getElementById(id).scrollIntoView({ behavior: 'smooth' });          
   }          
