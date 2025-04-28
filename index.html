@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.cdnfonts.com/css/coolvetica" rel="stylesheet">
   <style>
-    /* Your original CSS kept as it is */
+    /* Core Styles */
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Coolvetica', sans-serif; scroll-behavior: smooth; }
     html, body { width: 100%; overflow-x: hidden; }
     body { background: #0a0a0a; color: #fff; min-height: 100vh; display: flex; flex-direction: column; }
@@ -31,6 +31,49 @@
     .expanded-area, .single-item-page { display: none; animation: fadeIn 0.5s ease forwards; padding: 40px 20px; max-width: 1200px; margin: auto; }
     @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
     .back-button { background: none; border: none; color: #fff; font-size: 1rem; margin-bottom: 20px; cursor: pointer; }
+
+    /* Etc Drawer */
+    #etc-drawer {
+      position: fixed;
+      right: -300px;
+      top: 0;
+      height: 100%;
+      width: 250px;
+      background: #111;
+      color: #fff;
+      box-shadow: -2px 0 5px rgba(0,0,0,0.5);
+      transition: right 0.3s ease;
+      z-index: 2000;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    #etc-drawer.open {
+      right: 0;
+    }
+    #etc-drawer button {
+      background: #222;
+      border: none;
+      color: #fff;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    #etc-drawer button:hover {
+      background: #333;
+    }
+    .drawer-close {
+      align-self: flex-end;
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 1.5rem;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+
     @media (max-width: 600px) {
       header { font-size: 1.7rem; }
       nav button { padding: 6px 12px; font-size: 0.9rem; }
@@ -53,217 +96,94 @@
   <button onclick="scrollToSection('crowns')">Crowns</button>
   <button onclick="scrollToSection('shields')">Shields</button>
   <button onclick="scrollToSection('bandanas')">Bandanas</button>
+  <button onclick="toggleDrawer()">Etc</button>
 </nav>
 
-<!-- MAIN STORE SECTIONS -->
+<!-- ETC DRAWER -->
+<div id="etc-drawer">
+  <button class="drawer-close" onclick="toggleDrawer()">×</button>
+  <button onclick="scrollToSection('crowns'); toggleDrawer()">Crowns</button>
+  <button onclick="scrollToSection('bandanas'); toggleDrawer()">Bandanas</button>
+  <button onclick="scrollToSection('cloaks'); toggleDrawer()">Cloaks</button>
+  <button onclick="scrollToSection('horns'); toggleDrawer()">Horns</button> <!-- Horns will scroll -->
+</div>
+
+<!-- Example Store Sections -->
 <section id="cloaks" class="store-section">
   <div class="section-title">
     <span>Cloaks</span>
     <button class="expand-button" onclick="openExpanded('expanded-cloaks')">></button>
   </div>
   <div class="store-grid">
+    <!-- Cloaks content here -->
     <div class="item-card">
       <div class="item-image-container">
-        <img src="https://cdn.discordapp.com/attachments/1155423501205901312/1365994523540455494/file_2.gif?ex=680f5509&is=680e0389&hm=c09171ad8b855a0daa88c842ef45c6f95fb384be9a3097e80d0ed9d1ef4aa504&" alt="Red Lightning Cloak">
+        <img src="https://via.placeholder.com/300x200?text=Cloak+Example" alt="Example Cloak">
       </div>
       <div class="item-info">
-        <div class="item-name">Red Lightning Cloak</div>
+        <div class="item-name">Example Cloak</div>
         <div class="item-price">FREE</div>
-        <button class="buy-button" onclick="openItem('red-lightning')">Get for Free</button>
-      </div>
-    </div>
-    <div class="item-card">
-      <div class="item-image-container">
-        <img src="file.gif" alt="Japan Cloak">
-      </div>
-      <div class="item-info">
-        <div class="item-name">Japan Cloak</div>
-        <div class="item-price">FREE</div>
-        <button class="buy-button" onclick="openItem('japan')">Get for Free</button>
-      </div>
-    </div>
-    <div class="item-card">
-      <div class="item-image-container">
-        <img src="https://cdn.discordapp.com/attachments/1155423501205901312/1365994545602367488/file_1.gif?ex=680f550e&is=680e038e&hm=6793c5b67399b511a360ec0145fba092021a8f18031523c7f65494ab25ce3ddc&" alt="Aesthetic fire Cloak">
-      </div>
-      <div class="item-info">
-        <div class="item-name">Aesthetic fire Cloak</div>
-        <div class="item-price">FREE</div>
-        <button class="buy-button" onclick="openItem('aesthetic-fire')">Get for Free</button>
+        <button class="buy-button">Get for Free</button>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Crowns Section -->
 <section id="crowns" class="store-section">
   <div class="section-title">
     <span>Crowns</span>
-    <button class="expand-button" onclick="openExpanded('expanded-crowns')">></button>
+    <button class="expand-button">></button>
   </div>
   <div class="store-grid">
-    <div class="item-card">
-      <div class="item-image-container">
-        <img src="https://via.placeholder.com/300x200.png?text=Golden+Crown" alt="Golden Crown">
-      </div>
-      <div class="item-info">
-        <div class="item-name">Golden Crown</div>
-        <div class="item-price">$3.49</div>
-        <button class="buy-button">Buy Now</button>
-      </div>
-    </div>
+    <!-- Crowns content -->
   </div>
 </section>
 
-<!-- Shields Section -->
 <section id="shields" class="store-section">
   <div class="section-title">
     <span>Shields</span>
-    <button class="expand-button" onclick="openExpanded('expanded-shields')">></button>
+    <button class="expand-button">></button>
   </div>
   <div class="store-grid">
-    <div class="item-card">
-      <div class="item-image-container">
-        <img src="https://via.placeholder.com/300x200.png?text=Dragon+Shield" alt="Dragon Shield">
-      </div>
-      <div class="item-info">
-        <div class="item-name">Dragon Shield</div>
-        <div class="item-price">$4.99</div>
-        <button class="buy-button">Buy Now</button>
-      </div>
-    </div>
+    <!-- Shields content -->
   </div>
 </section>
 
-<!-- Bandanas Section -->
 <section id="bandanas" class="store-section">
   <div class="section-title">
     <span>Bandanas</span>
-    <button class="expand-button" onclick="openExpanded('expanded-bandanas')">></button>
+    <button class="expand-button">></button>
   </div>
   <div class="store-grid">
+    <!-- Bandanas content -->
+  </div>
+</section>
+
+<section id="horns" class="store-section">
+  <div class="section-title">
+    <span>Horns</span>
+    <button class="expand-button">></button>
+  </div>
+  <div class="store-grid">
+    <!-- Horns content -->
     <div class="item-card">
       <div class="item-image-container">
-        <img src="https://via.placeholder.com/300x200.png?text=Red+Bandana" alt="Red Bandana">
+        <img src="https://via.placeholder.com/300x200?text=Horn+Example" alt="Example Horn">
       </div>
       <div class="item-info">
-        <div class="item-name">Red Bandana</div>
-        <div class="item-price">$2.49</div>
-        <button class="buy-button">Buy Now</button>
+        <div class="item-name">Example Horn</div>
+        <div class="item-price">FREE</div>
+        <button class="buy-button">Get for Free</button>
       </div>
     </div>
   </div>
 </section>
-
-<!-- EXPANDED SECTIONS -->
-<div id="expanded-cloaks" class="expanded-area">
-  <button class="back-button" onclick="goBack()">← Back</button>
-  <h2>Cloaks</h2>
-  <div class="store-grid">
-    <div class="item-card">
-      <div class="item-image-container">
-        <img src="file.png" alt="Heart Cloak">
-      </div>
-      <div class="item-info">
-        <div class="item-name">Heart Cloak</div>
-        <div class="item-price">FREE</div>
-        <button class="buy-button" onclick="openItem('heart')">Get for Free</button>
-      </div>
-    </div>
-     <div class="item-card">
-
-      <div class="item-image-container">
-
-        <img src="https://cdn.discordapp.com/attachments/1155423501205901312/1365994523540455494/file_2.gif?ex=680f5509&is=680e0389&hm=c09171ad8b855a0daa88c842ef45c6f95fb384be9a3097e80d0ed9d1ef4aa504&" alt="Red Lightning">
-      </div>
-      <div class="item-info">
-        <div class="item-name">Red Lightning</div>
-        <div class="item-price">FREE</div>
-        <button class="buy-button" onclick="openItem('red-lightning')">Get for Free</button>
-      </div>
-    </div>
-    <div class="item-card">
-      <div class="item-image-container">
-        <img src="https://cdn.discordapp.com/attachments/1155423501205901312/1365994567584841728/file.gif?ex=680f5513&is=680e0393&hm=2c9336f9663ed86ba600c44fa49bdcce77882920006d58ea4f6c2956ed659e29&" alt="Japan">
-      </div>
-      <div class="item-info">
-        <div class="item-name">Japan</div>
-        <div class="item-price">FREE</div>
-        <button class="buy-button" onclick="openItem('japan')">Get for Free</button>
-      </div>
-    </div>
-    <div class="item-card">
-      <div class="item-image-container">
-        <img src="https://cdn.discordapp.com/attachments/1155423501205901312/1365994545602367488/file_1.gif?ex=680f550e&is=680e038e&hm=6793c5b67399b511a360ec0145fba092021a8f18031523c7f65494ab25ce3ddc&" alt="Aesthetic fire Cloak">
-      </div>
-      <div class="item-info">
-        <div class="item-name">Aesthetic fire</div>
-        <div class="item-price">FREE</div>
-        <button class="buy-button" onclick="openItem('aesthetic-fire')">Get for Free</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Single Item Pages -->
-<div id="red-lightning" class="single-item-page">
-  <button class="back-button" onclick="goBack()">← Back</button>
-  <div class="item-card">
-    <div class="item-image-container">
-      <img src="https://cdn.discordapp.com/attachments/1155423501205901312/1365994523540455494/file_2.gif?ex=680f5509&is=680e0389&hm=c09171ad8b855a0daa88c842ef45c6f95fb384be9a3097e80d0ed9d1ef4aa504&" alt="Red Lightning">
-    </div>
-    <div class="item-info">
-      <div class="item-name">Red Lightning</div>
-      <a href="https://www.mediafire.com/file/ziajhvym7tky0rn/red+lightning.mcpack/file" download class="buy-button">Download</a>
-    </div>
-  </div>
-</div>
-
-<div id="heart" class="single-item-page">
-
-  <button class="back-button" onclick="goBack()">← Back</button>
-
-  <div class="item-card">
-    <div class="item-image-container">
-      <img src="file.png" alt="heart-cloak">
-    </div>
-    <div class="item-info">
-      <div class="item-name">Heart</div>
-      <a href="file.png" download class="buy-button">Download</a>
-    </div>
-  </div>
-</div>
-
-<div id="japan" class="single-item-page">
-  <button class="back-button" onclick="goBack()">← Back</button>
-  <div class="item-card">
-    <div class="item-image-container">
-      <img src="https://cdn.discordapp.com/attachments/1155423501205901312/1365994567584841728/file.gif?ex=680f5513&is=680e0393&hm=2c9336f9663ed86ba600c44fa49bdcce77882920006d58ea4f6c2956ed659e29&" alt="Japan">
-    </div>
-    <div class="item-info">
-      <div class="item-name">Japan</div>
-      <a href="https://www.mediafire.com/file/l275n3s1l994w9f/japan.mcpack/file" download class="buy-button">Download</a>
-    </div>
-  </div>
-</div>
-
-<div id="aesthetic-fire" class="single-item-page">
-  <button class="back-button" onclick="goBack()">← Back</button>
-  <div class="item-card">
-    <div class="item-image-container">
-      <img src="https://cdn.discordapp.com/attachments/1155423501205901312/1365994545602367488/file_1.gif?ex=680f550e&is=680e038e&hm=6793c5b67399b511a360ec0145fba092021a8f18031523c7f65494ab25ce3ddc&" alt="Aesthetic Fire">
-    </div>
-    <div class="item-info">
-      <div class="item-name">Aesthetic Fire</div>
-      <a href="https://www.mediafire.com/file/1wlygu4ebhgm6vp/deivid.mcpack/file" download class="buy-button">Download</a>
-    </div>
-  </div>
-</div>
 
 <footer>
   © 2025 Origin Client. All rights reserved.
 </footer>
 
+<!-- JavaScript -->
 <script>
   function scrollToSection(id) {
     document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
@@ -275,16 +195,9 @@
     window.scrollTo(0, 0);
   }
 
-  function openItem(id) {
-    document.querySelectorAll('section, nav, footer, header, .expanded-area, .single-item-page').forEach(el => el.style.display = 'none');
-    document.getElementById(id).style.display = 'block';
-    window.scrollTo(0, 0);
-  }
-
-  function goBack() {
-    document.querySelectorAll('.expanded-area, .single-item-page').forEach(el => el.style.display = 'none');
-    document.querySelectorAll('section, nav, footer, header').forEach(el => el.style.display = '');
-    window.scrollTo(0, 0);
+  function toggleDrawer() {
+    const drawer = document.getElementById('etc-drawer');
+    drawer.classList.toggle('open');
   }
 </script>
 
