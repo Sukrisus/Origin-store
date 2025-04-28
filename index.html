@@ -158,26 +158,58 @@
     <!-- Bandanas content -->
   </div>
 </section>
-
+<!-- Horns Section -->
 <section id="horns" class="store-section">
   <div class="section-title">
     <span>Horns</span>
-    <button class="expand-button">></button>
+    <button class="expand-button" onclick="openExpanded('expanded-horns')">></button>
   </div>
   <div class="store-grid">
-    <!-- Horns content -->
     <div class="item-card">
       <div class="item-image-container">
-        <img src="https://via.placeholder.com/300x200?text=Horn+Example" alt="Example Horn">
+        <img src="bh.png" alt="Black Horn">
       </div>
       <div class="item-info">
-        <div class="item-name">Example Horn</div>
-        <div class="item-price">FREE</div>
-        <button class="buy-button">Get for Free</button>
+        <div class="item-name">Black Horn</div>
+        <div class="item-price">$2.99</div>
+        <button class="buy-button" onclick="openItem('black-horn')">Buy Now</button>
       </div>
     </div>
   </div>
 </section>
+
+<!-- Expanded Horns Section -->
+<div id="expanded-horns" class="expanded-area">
+  <button class="back-button" onclick="goBack()">← Back</button>
+  <h2>Horns</h2>
+  <div class="store-grid">
+    <div class="item-card">
+      <div class="item-image-container">
+        <img src="bh.png" alt="Black Horn">
+      </div>
+      <div class="item-info">
+        <div class="item-name">Black Horn</div>
+        <div class="item-price">$2.99</div>
+        <a href="https://www.mediafire.com/file/3sw00breui6ib01/Black_Horn.mcpack/file" download class="buy-button">Download</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Single Item Page for Black Horn -->
+<div id="black-horn" class="single-item-page">
+  <button class="back-button" onclick="goBack()">← Back</button>
+  <div class="item-card">
+    <div class="item-image-container">
+      <img src="bh.png" alt="Black Horn">
+    </div>
+    <div class="item-info">
+      <div class="item-name">Black Horn</div>
+      <a href="https://www.mediafire.com/file/3sw00breui6ib01/Black_Horn.mcpack/file" download class="buy-button">Download</a>
+    </div>
+  </div>
+</div>
+
 
 <footer>
   © 2025 Origin Client. All rights reserved.
