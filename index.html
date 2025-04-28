@@ -1,207 +1,146 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Cosmetic Store</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #121212;
-      color: #fff;
-    }
-    header {
-      padding: 20px;
-      text-align: center;
-      font-size: 2em;
-      background: #1f1f1f;
-    }
-    .group-title {
-      margin: 20px;
-      font-size: 1.5em;
-      border-bottom: 2px solid #555;
-      padding-bottom: 5px;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 20px;
-      padding: 20px;
-    }
-    .card {
-      background: #1f1f1f;
-      border-radius: 10px;
-      overflow: hidden;
-      cursor: pointer;
-      text-align: center;
-      transition: transform 0.2s;
-    }
-    .card:hover {
-      transform: scale(1.05);
-    }
-    .card img {
-      width: 100%;
-      height: 150px;
-      object-fit: cover;
-    }
-    .card-name {
-      padding: 10px;
-      font-size: 1.1em;
-    }
-    /* Modal */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.8);
-      align-items: center;
-      justify-content: center;
-    }
-    .modal-content {
-      background: #2c2c2c;
-      padding: 20px;
-      border-radius: 10px;
-      text-align: center;
-      max-width: 400px;
-    }
-    .modal-content img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-      border-radius: 10px;
-    }
-    .modal-content h2 {
-      margin: 15px 0 10px;
-    }
-    .download-btn {
-      display: inline-block;
-      margin-top: 15px;
-      padding: 10px 20px;
-      background: #4caf50;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-      font-size: 1em;
-    }
-    .close {
-      position: absolute;
-      top: 20px;
-      right: 30px;
-      font-size: 2em;
-      cursor: pointer;
-    }
-  </style>
-</head>
-<body>
-
-<header>Cosmetic Store</header>
-
-<!-- Cloaks Group -->
-<div class="group-title">Cloaks</div>
-<div class="grid" id="cloaks-grid">
-  <!-- Cloaks cards here -->
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+  <meta charset="UTF-8">  
+  <title>Origin Client Store</title>  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+  <link href="https://fonts.cdnfonts.com/css/coolvetica" rel="stylesheet">  
+  <style>  
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Coolvetica', sans-serif; scroll-behavior: smooth; }  
+    html, body { width: 100%; overflow-x: hidden; }  
+    body { background: #0a0a0a; color: #fff; min-height: 100vh; display: flex; flex-direction: column; }  
+    header { background: #0d0d0d; padding: 16px; font-size: 2rem; text-align: center; font-weight: bold; letter-spacing: 1.5px; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid #222; }  
+    nav { background: #0d0d0d; display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; padding: 10px; position: sticky; top: 70px; z-index: 999; border-bottom: 1px solid #222; }  
+    nav button { background: #111; color: #fff; border: none; padding: 8px 16px; border-radius: 8px; font-size: 1rem; cursor: pointer; transition: background 0.3s; }  
+    nav button:hover { background: #1f1f1f; }  
+    #main-nav { display: flex; justify-content: center; gap: 15px; }  
+    #drawer-nav { position: fixed; top: 0; right: -250px; background: #111; height: 100vh; width: 250px; transition: right 0.3s; padding: 20px; z-index: 1001; }  
+    #drawer-nav ul { list-style: none; padding: 0; }  
+    #drawer-nav li { margin: 10px 0; }  
+    #drawer-nav a { color: #fff; text-decoration: none; font-size: 1.2rem; }  
+    #drawer-btn { position: absolute; top: 20px; left: 20px; font-size: 2rem; cursor: pointer; }  
+    section { padding: 40px 20px; max-width: 1200px; margin: auto; }  
+    .section-title { font-size: 1.8rem; margin-bottom: 20px; border-bottom: 2px solid #222; padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }  
+    .store-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; margin-top: 20px; }  
+    .item-card { background: #111; border-radius: 12px; overflow: hidden; transition: 0.3s; border: 1px solid #222; display: flex; flex-direction: column; }  
+    .item-card:hover { transform: translateY(-5px); border-color: #333; box-shadow: 0 6px 20px rgba(255,255,255,0.08); }  
+    .item-image-container { background: #1a1a1a; height: 180px; display: flex; align-items: center; justify-content: center; }  
+    .item-image-container img { max-height: 100%; max-width: 100%; object-fit: contain; }  
+    .item-info { padding: 15px; text-align: center; }  
+    .item-name { font-size: 1.3rem; margin-bottom: 8px; }  
+    .item-price { color: #aaa; margin-bottom: 12px; font-size: 0.9rem; }  
+    .buy-button { background: transparent; border: 2px solid #fff; color: #fff; padding: 8px 16px; border-radius: 6px; font-size: 1rem; width: 100%; transition: 0.3s; cursor: pointer; }  
+    .buy-button:hover { background: #fff; color: #000; }  
+    footer { text-align: center; padding: 16px; font-size: 0.8rem; color: #555; margin-top: auto; background: #0d0d0d; border-top: 1px solid #222; }  
+    .expanded-area, .single-item-page { display: none; animation: fadeIn 0.5s ease forwards; padding: 40px 20px; max-width: 1200px; margin: auto; }  
+    @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }  
+    .back-button { background: none; border: none; color: #fff; font-size: 1rem; margin-bottom: 20px; cursor: pointer; }  
+    @media (max-width: 600px) {  
+      header { font-size: 1.7rem; }  
+      nav button { padding: 6px 12px; font-size: 0.9rem; }  
+      section { padding: 30px 16px; }  
+      .section-title { font-size: 1.5rem; }  
+      .item-card { border-radius: 10px; }  
+      .item-name { font-size: 1.1rem; }  
+      .buy-button { font-size: 0.9rem; }  
+      .expand-button { font-size: 1.3rem; }  
+      .item-image-container { height: 150px; }  
+    }  
+  </style>  
+</head>  
+<body>  
+  
+<header>Origin Client Store</header>  
+  
+<!-- Main Navigation Buttons -->
+<nav>  
+  <div id="main-nav">
+    <button onclick="scrollToSection('cloaks')">Cloaks</button>  
+    <button onclick="scrollToSection('crowns')">Crowns</button>  
+    <button onclick="scrollToSection('bandanas')">Bandanas</button>  
+  </div>  
+  <button id="drawer-btn" onclick="toggleDrawer()">&#9776;</button>  
+</nav>  
+  
+<!-- Drawer Navigation (Initially hidden) -->
+<div id="drawer-nav">
+  <ul>
+    <li><a href="#" onclick="scrollToSection('shields')">Shields</a></li>
+    <li><a href="#" onclick="scrollToSection('horns')">Horns</a></li>
+    <li><a href="#" onclick="scrollToSection('others')">Others</a></li>
+    <li><a href="#" onclick="scrollToSection('crowns')">Crowns</a></li>
+    <li><a href="#" onclick="scrollToSection('cloaks')">Cloaks</a></li>
+    <li><a href="#" onclick="scrollToSection('bandanas')">Bandanas</a></li>
+  </ul>
 </div>
 
-<!-- Crowns Group -->
-<div class="group-title">Crowns</div>
-<div class="grid" id="crowns-grid">
-  <!-- Crowns cards here -->
-</div>
+<!-- Main Sections -->
+<section id="cloaks" class="store-section">  
+  <div class="section-title">  
+    <span>Cloaks</span>  
+  </div>  
+  <div class="store-grid">  
+    <!-- Cloaks Items Here -->  
+  </div>  
+</section>  
 
-<!-- Horns Group -->
-<div class="group-title">Horns</div>
-<div class="grid" id="horns-grid">
-  <!-- Horns cards here -->
-</div>
+<section id="crowns" class="store-section">  
+  <div class="section-title">  
+    <span>Crowns</span>  
+  </div>  
+  <div class="store-grid">  
+    <!-- Crowns Items Here -->  
+  </div>  
+</section>  
 
-<!-- Wings Group -->
-<div class="group-title">Wings</div>
-<div class="grid" id="wings-grid">
-  <!-- Wings cards here -->
-</div>
+<section id="bandanas" class="store-section">  
+  <div class="section-title">  
+    <span>Bandanas</span>  
+  </div>  
+  <div class="store-grid">  
+    <!-- Bandanas Items Here -->  
+  </div>  
+</section>  
 
-<!-- Bandanas Group -->
-<div class="group-title">Bandanas</div>
-<div class="grid" id="bandanas-grid">
-  <!-- Bandanas cards here -->
-</div>
+<!-- Expanded Sections and Item Pages (Similar to previous structure) -->
 
-<!-- Modal for detail view -->
-<div class="modal" id="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal()">&times;</span>
-    <img id="modal-image" src="" alt="Cosmetic Image">
-    <h2 id="modal-title"></h2>
-    <a id="modal-download" href="#" class="download-btn" target="_blank">Download</a>
-  </div>
-</div>
+<footer>  
+  © 2025 Origin Client. All rights reserved.  
+</footer>  
 
-<script>
-  const cosmetics = [
-    {
-      group: "cloaks",
-      name: "Fire Cape",
-      icon: "https://example.com/firecape.png",
-      download: "https://example.com/firecape.zip"
-    },
-    {
-      group: "horns",
-      name: "Devil Horns",
-      icon: "https://example.com/devilhorns.png",
-      download: "https://example.com/devilhorns.zip"
-    },
-    {
-      group: "wings",
-      name: "Angel Wings",
-      icon: "https://example.com/angelwings.png",
-      download: "https://example.com/angelwings.zip"
-    },
-    {
-      group: "bandanas",
-      name: "Red Bandana",
-      icon: "https://example.com/redbandana.png",
-      download: "https://example.com/redbandana.zip"
-    },
-    {
-      group: "crowns",
-      name: "Golden Crown",
-      icon: "https://example.com/goldcrown.png",
-      download: "https://example.com/goldcrown.zip"
-    },
-  ];
-
-  const modal = document.getElementById("modal");
-  const modalImage = document.getElementById("modal-image");
-  const modalTitle = document.getElementById("modal-title");
-  const modalDownload = document.getElementById("modal-download");
-
-  function openModal(cosmetic) {
-    modal.style.display = "flex";
-    modalImage.src = cosmetic.icon;
-    modalTitle.textContent = cosmetic.name;
-    modalDownload.href = cosmetic.download;
+<script>  
+  function scrollToSection(id) {  
+    document.getElementById(id).scrollIntoView({ behavior: 'smooth' });  
   }
 
-  function closeModal() {
-    modal.style.display = "none";
+  // Toggle the drawer visibility
+  function toggleDrawer() {
+    const drawer = document.getElementById('drawer-nav');
+    const rightPosition = drawer.style.right === "0px" ? "-250px" : "0px";
+    drawer.style.right = rightPosition;
   }
 
-  cosmetics.forEach(cosmetic => {
-    const grid = document.getElementById(cosmetic.group + "-grid");
-    if (grid) {
-      const card = document.createElement("div");
-      card.className = "card";
-      card.innerHTML = `
-        <img src="${cosmetic.icon}" alt="${cosmetic.name}">
-        <div class="card-name">${cosmetic.name}</div>
-      `;
-      card.onclick = () => openModal(cosmetic);
-      grid.appendChild(card);
-    }
-  });
-</script>
+  // Handle expanded sections
+  function openExpanded(id) {  
+    document.querySelectorAll('section, nav, footer, header').forEach(el => el.style.display = 'none');  
+    document.getElementById(id).style.display = 'block';  
+    window.scrollTo(0, 0);  
+  }
 
-</body>
+  // Handle opening single item pages
+  function openItem(id) {  
+    document.querySelectorAll('section, nav, footer, header, .expanded-area, .single-item-page').forEach(el => el.style.display = 'none');  
+    document.getElementById(id).style.display = 'block';  
+    window.scrollTo(0, 0);  
+  }
+
+  // Go back to the main store screen
+  function goBack() {  
+    document.querySelectorAll('.expanded-area, .single-item-page').forEach(el => el.style.display = 'none');  
+    document.querySelectorAll('section, nav, footer, header').forEach(el => el.style.display = '');  
+    window.scrollTo(0, 0);  
+  }  
+</script>  
+
+</body>  
 </html>
