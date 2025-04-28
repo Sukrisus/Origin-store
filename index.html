@@ -253,29 +253,35 @@
 </div>          <footer>          
   © 2025 Origin Client. All rights reserved.          
 </footer>          
-<script>
-function scrollToSection(id) {
-  document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
-}
-
-function openExpanded(id) {
-  document.querySelectorAll('.expanded-area').forEach(e => e.style.display = 'none');
-  document.getElementById(id).style.display = 'block';
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function goBack() {
-  document.querySelectorAll('.expanded-area').forEach(e => e.style.display = 'none');
-}
-
-function toggleDrawer() {
+<script>          
+  function scrollToSection(id) {          
+    document.getElementById(id).scrollIntoView({ behavior: 'smooth' });          
+  }          
+          
+  function openExpanded(id) {          
+    document.querySelectorAll('section, nav, footer, header').forEach(el => el.style.display = 'none');          
+    document.getElementById(id).style.display = 'block';          
+    window.scrollTo(0, 0);          
+  }          
+          
+  function openItem(id) {          
+    document.querySelectorAll('section, nav, footer, header, .expanded-area, .single-item-page').forEach(el => el.style.display = 'none');          
+    document.getElementById(id).style.display = 'block';          
+    window.scrollTo(0, 0);          
+  }          
+          
+  function goBack() {          
+    document.querySelectorAll('.expanded-area, .single-item-page').forEach(el => el.style.display = 'none');          
+    document.querySelectorAll('section, nav, footer, header').forEach(el => el.style.display = '');          
+    window.scrollTo(0, 0);          
+  }   
+  
+  function toggleDrawer() {
   document.getElementById('drawer').classList.toggle('open');
 }
 
 function openItem(itemId) {
   alert('Open item: ' + itemId);
 }
-</script>
-
-</body>
+</script>          </body>          
 </html>
