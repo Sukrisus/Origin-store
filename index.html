@@ -42,6 +42,49 @@
       .expand-button { font-size: 1.3rem; }          
       .item-image-container { height: 150px; }          
     }          
+    /* Drawer styles */
+#drawer {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  background-color: #111;
+  overflow-x: hidden;
+  transition: 0.3s;
+  padding-top: 60px;
+  display: none;
+}
+
+#drawer a {
+  padding: 8px 16px;
+  text-decoration: none;
+  font-size: 1.2rem;
+  color: #fff;
+  display: block;
+  transition: 0.3s;
+}
+
+#drawer a:hover {
+  background-color: #575757;
+}
+
+#drawer-btn {
+  font-size: 2rem;
+  color: #fff;
+  cursor: pointer;
+  margin: 16px;
+}
+
+.drawer-close-btn {
+  font-size: 2rem;
+  color: #fff;
+  cursor: pointer;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
   </style>          
 </head>          
 <body>       
