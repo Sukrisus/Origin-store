@@ -44,7 +44,22 @@
     }          
   </style>          
 </head>          
-<body>          
+<body>       
+<!-- Drawer -->
+<div id="drawer">
+  <span class="drawer-close-btn" onclick="closeDrawer()">×</span>
+  <a href="javascript:void(0)" onclick="scrollToSection('cloaks')">Cloaks</a>
+  <a href="javascript:void(0)" onclick="scrollToSection('crowns')">Crowns</a>
+  <a href="javascript:void(0)" onclick="scrollToSection('shields')">Shields</a>
+  <a href="javascript:void(0)" onclick="scrollToSection('bandanas')">Bandanas</a>
+  <a href="javascript:void(0)" onclick="scrollToSection('horns')">Horns</a>
+  <a href="javascript:void(0)" onclick="scrollToSection('wings')">Wings</a>
+</div>
+
+<!-- Main Navigation -->
+<nav>
+  <button onclick="openDrawer()">☰</button>
+</nav>
           
 <header>Origin Client Store</header>          
           
