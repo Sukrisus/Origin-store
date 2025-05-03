@@ -1,287 +1,623 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Origin Client Store</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.cdnfonts.com/css/coolvetica" rel="stylesheet">
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Coolvetica', sans-serif; scroll-behavior: smooth; }
-    html, body { width: 100%; overflow-x: hidden; }
-    body { background: #0a0a0a; color: #fff; min-height: 100vh; display: flex; flex-direction: column; }
-    header { background: #0d0d0d; padding: 16px; font-size: 2rem; text-align: center; font-weight: bold; letter-spacing: 1.5px; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid #222; display: flex; align-items: center; justify-content: center; position: relative; }
-    nav { background: #0d0d0d; display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; padding: 10px; position: sticky; top: 70px; z-index: 999; border-bottom: 1px solid #222; }
-    nav button { background: #111; color: #fff; border: none; padding: 8px 16px; border-radius: 8px; font-size: 1rem; cursor: pointer; transition: background 0.3s; }
-    nav button:hover { background: #1f1f1f; }
-    section { padding: 40px 20px; max-width: 1200px; margin: auto; }
-    .section-title { font-size: 1.8rem; margin-bottom: 20px; border-bottom: 2px solid #222; padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
-    .store-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; margin-top: 20px; }
-    .item-card { background: #111; border-radius: 12px; overflow: hidden; transition: 0.3s; border: 1px solid #222; display: flex; flex-direction: column; }
-    .item-card:hover { transform: translateY(-5px); border-color: #333; box-shadow: 0 6px 20px rgba(255,255,255,0.08); }
-    .item-image-container { background: #1a1a1a; height: 180px; display: flex; align-items: center; justify-content: center; }
-    .item-image-container img { max-height: 100%; max-width: 100%; object-fit: contain; }
-    .item-info { padding: 15px; text-align: center; }
-    .item-name { font-size: 1.3rem; margin-bottom: 8px; }
-    .item-price { color: #aaa; margin-bottom: 12px; font-size: 0.9rem; }
-    .buy-button { background: transparent; border: 2px solid #fff; color: #fff; padding: 8px 16px; border-radius: 6px; font-size: 1rem; width: 100%; transition: 0.3s; cursor: pointer; }
-    .buy-button:hover { background: #fff; color: #000; }
-    .expand-button { background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; }
-    footer { text-align: center; padding: 16px; font-size: 0.8rem; color: #555; margin-top: auto; background: #0d0d0d; border-top: 1px solid #222; }
-    .expanded-area, .single-item-page { display: none; animation: fadeIn 0.5s ease forwards; padding: 40px 20px; max-width: 1200px; margin: auto; }
-    @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
-    .back-button { background: none; border: none; color: #fff; font-size: 1rem; margin-bottom: 20px; cursor: pointer; }
-    
-    /* Drawer styles */
-    .drawer-button { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); background: none; border: none; font-size: 1.8rem; color: #fff; cursor: pointer; }
-    .drawer { position: fixed; top: 0; left: -250px; width: 250px; height: 100%; background: #111; box-shadow: 2px 0 5px rgba(0,0,0,0.5); padding: 20px; transition: left 0.3s; z-index: 1500; }
-    .drawer.open { left: 0; }
-    .drawer a { display: block; padding: 12px 0; color: #fff; text-decoration: none; font-size: 1.2rem; border-bottom: 1px solid #222; }
-    .drawer a:hover { background: #222; }
-    .drawer-close { background: none; border: none; color: #fff; font-size: 1.5rem; margin-bottom: 20px; cursor: pointer; text-align: right; display: block; }
-    
-    @media (max-width: 600px) {
-      header { font-size: 1.7rem; }
-      nav button { padding: 6px 12px; font-size: 0.9rem; }
-      section { padding: 30px 16px; }
-      .section-title { font-size: 1.5rem; }
-      .item-card { border-radius: 10px; }
-      .item-name { font-size: 1.1rem; }
-      .buy-button { font-size: 0.9rem; }
-      .expand-button { font-size: 1.3rem; }
-      .item-image-container { height: 150px; }
-    }
-  </style>
-</head>
-<body>
+<!DOCTYPE html>  <html lang="en">  
+<head>  
+  <meta charset="UTF-8">  
+  <title>Origin Client Store</title>  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+  <link href="https://fonts.cdnfonts.com/css/coolvetica" rel="stylesheet">  
+  <style>  
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Coolvetica', sans-serif; scroll-behavior: smooth; }  
+    html, body { width: 100%; overflow-x: hidden; }  
+    body { background: #0a0a0a; color: #fff; min-height: 100vh; display: flex; flex-direction: column; }  
+    header { background: #0d0d0d; padding: 16px; font-size: 2rem; text-align: center; font-weight: bold; letter-spacing: 1.5px; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid #222; display: flex; align-items: center; justify-content: center; position: relative; }  
+    nav { background: #0d0d0d; display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; padding: 10px; position: sticky; top: 70px; z-index: 999; border-bottom: 1px solid #222; }  
+    nav button { background: #111; color: #fff; border: none; padding: 8px 16px; border-radius: 8px; font-size: 1rem; cursor: pointer; transition: background 0.3s; }  
+    nav button:hover { background: #1f1f1f; }  
+    section { padding: 40px 20px; max-width: 1200px; margin: auto; }  
+    .section-title { font-size: 1.8rem; margin-bottom: 20px; border-bottom: 2px solid #222; padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }  
+    .store-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; margin-top: 20px; }  
+    .item-card { background: #111; border-radius: 12px; overflow: hidden; transition: 0.3s; border: 1px solid #222; display: flex; flex-direction: column; }  
+    .item-card:hover { transform: translateY(-5px); border-color: #333; box-shadow: 0 6px 20px rgba(255,255,255,0.08); }  
+    .item-image-container { background: #1a1a1a; height: 180px; display: flex; align-items: center; justify-content: center; }  
+    .item-image-container img { max-height: 100%; max-width: 100%; object-fit: contain; }  
+    .item-info { padding: 15px; text-align: center; }  
+    .item-name { font-size: 1.3rem; margin-bottom: 8px; }  
+    .item-price { color: #aaa; margin-bottom: 12px; font-size: 0.9rem; }  
+    .buy-button { background: transparent; border: 2px solid #fff; color: #fff; padding: 8px 16px; border-radius: 6px; font-size: 1rem; width: 100%; transition: 0.3s; cursor: pointer; }  
+    .buy-button:hover { background: #fff; color: #000; }  
+    .expand-button { background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; }  
+    footer { text-align: center; padding: 16px; font-size: 0.8rem; color: #555; margin-top: auto; background: #0d0d0d; border-top: 1px solid #222; }  
+    .expanded-area, .single-item-page { display: none; animation: fadeIn 0.5s ease forwards; padding: 40px 20px; max-width: 1200px; margin: auto; }  
+    @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }  
+    .back-button { background: none; border: none; color: #fff; font-size: 1rem; margin-bottom: 20px; cursor: pointer; }  /* Drawer styles */  
+.drawer-button { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); background: none; border: none; font-size: 1.8rem; color: #fff; cursor: pointer; }  
+.drawer { position: fixed; top: 0; left: -250px; width: 250px; height: 100%; background: #111; box-shadow: 2px 0 5px rgba(0,0,0,0.5); padding: 20px; transition: left 0.3s; z-index: 1500; }  
+.drawer.open { left: 0; }  
+.drawer a { display: block; padding: 12px 0; color: #fff; text-decoration: none; font-size: 1.2rem; border-bottom: 1px solid #222; }  
+.drawer a:hover { background: #222; }  
+.drawer-close { background: none; border: none; color: #fff; font-size: 1.5rem; margin-bottom: 20px; cursor: pointer; text-align: right; display: block; }  
   
-<header>
-  <button class="drawer-button" onclick="toggleDrawer()">☰</button>
-  Origin Client Store
-</header>
-
-<div class="drawer" id="drawer">
-  <button class="drawer-close" onclick="toggleDrawer()">×</button>
-  <a href="#cloaks" onclick="toggleDrawer()">Cloaks</a>
-  <a href="#crowns" onclick="toggleDrawer()">Crowns</a>
-  <a href="#shields" onclick="toggleDrawer()">Shields</a>
-  <a href="#bandanas" onclick="toggleDrawer()">Bandanas</a>
-</div>
-
-<nav>
-  <button onclick="scrollToSection('cloaks')">Cloaks</button>
-  <button onclick="scrollToSection('crowns')">Crowns</button>
-  <button onclick="scrollToSection('shields')">Shields</button>
-  <button onclick="scrollToSection('bandanas')">Bandanas</button>
-</nav>          <!-- MAIN STORE SECTIONS -->          <section id="cloaks" class="store-section">          
-  <div class="section-title">          
-    <span>Cloaks</span>          
-    <button class="expand-button" onclick="openExpanded('expanded-cloaks')">></button>          
-  </div>          
-  <div class="store-grid">          
-    <div class="item-card">          
-      <div class="item-image-container">          
-        <img src="https://cdn.discordapp.com/attachments/1155423501205901312/1365994523540455494/file_2.gif?ex=680f5509&is=680e0389&hm=c09171ad8b855a0daa88c842ef45c6f95fb384be9a3097e80d0ed9d1ef4aa504&" alt="Red Lightning Cloak">          
-      </div>          
-      <div class="item-info">          
-        <div class="item-name">Red Lightning Cloak</div>          
-        <div class="item-price">FREE</div>          
-        <button class="buy-button" onclick="openItem('red-lightning')">Get for Free</button>          
-      </div>          
-    </div>          
-    <div class="item-card">          
-      <div class="item-image-container">          
-        <img src="file.gif" alt="Japan Cloak">          
-      </div>          
-      <div class="item-info">          
-        <div class="item-name">Japan Cloak</div>          
-        <div class="item-price">FREE</div>          
-        <button class="buy-button" onclick="openItem('japan')">Get for Free</button>          
-      </div>          
-    </div>          
-    <div class="item-card">          
-      <div class="item-image-container">          
-        <img src="https://cdn.discordapp.com/attachments/1155423501205901312/1365994545602367488/file_1.gif?ex=680f550e&is=680e038e&hm=6793c5b67399b511a360ec0145fba092021a8f18031523c7f65494ab25ce3ddc&" alt="Aesthetic fire Cloak">          
-      </div>          
-      <div class="item-info">          
-        <div class="item-name">Aesthetic fire Cloak</div>          
-        <div class="item-price">FREE</div>          
-        <button class="buy-button" onclick="openItem('aesthetic-fire')">Get for Free</button>          
-      </div>          
-    </div>          
-  </div>          
-</section>          <!-- Crowns Section -->          <section id="crowns" class="store-section">          
-  <div class="section-title">          
-    <span>Crowns</span>          
-    <button class="expand-button" onclick="openExpanded('expanded-crowns')">></button>          
-  </div>          
-  <div class="store-grid">          
-    <div class="item-card">          
-      <div class="item-image-container">          
-        <img src="https://via.placeholder.com/300x200.png?text=Golden+Crown" alt="Golden Crown">          
-      </div>          
-      <div class="item-info">          
-        <div class="item-name">Golden Crown</div>          
-        <div class="item-price">$3.49</div>          
-        <button class="buy-button">Buy Now</button>          
-      </div>          
-    </div>          
-  </div>          
-</section>          <!-- Shields Section -->          <section id="shields" class="store-section">          
-  <div class="section-title">          
-    <span>Shields</span>          
-    <button class="expand-button" onclick="openExpanded('expanded-shields')">></button>          
-  </div>          
-  <div class="store-grid">          
-    <div class="item-card">          
-      <div class="item-image-container">          
-        <img src="https://via.placeholder.com/300x200.png?text=Dragon+Shield" alt="Dragon Shield">          
-      </div>          
-      <div class="item-info">          
-        <div class="item-name">Dragon Shield</div>          
-        <div class="item-price">$4.99</div>          
-        <button class="buy-button">Buy Now</button>          
-      </div>          
-    </div>          
-  </div>          
-</section>          <!-- Bandanas Section -->          <section id="bandanas" class="store-section">          
-  <div class="section-title">          
-    <span>Bandanas</span>          
-    <button class="expand-button" onclick="openExpanded('expanded-bandanas')">></button>          
-  </div>          
-  <div class="store-grid">          
-    <div class="item-card">          
-      <div class="item-image-container">          
-        <img src="https://via.placeholder.com/300x200.png?text=Red+Bandana" alt="Red Bandana">          
-      </div>          
-      <div class="item-info">          
-        <div class="item-name">Red Bandana</div>          
-        <div class="item-price">$2.49</div>          
-        <button class="buy-button">Buy Now</button>          
-      </div>          
-    </div>          
-  </div>          
-</section>          <!-- EXPANDED SECTIONS -->          <div id="expanded-cloaks" class="expanded-area">          
-  <button class="back-button" onclick="goBack()">← Back</button>          
-  <h2>Cloaks</h2>          
-  <div class="store-grid">          
-    <div class="item-card">          
-      <div class="item-image-container">          
-        <img src="file.png" alt="Heart Cloak">          
-      </div>          
-      <div class="item-info">          
-        <div class="item-name">Heart Cloak</div>          
-        <div class="item-price">FREE</div>          
-        <button class="buy-button" onclick="openItem('heart')">Get for Free</button>          
-      </div>          
-    </div>          
-     <div class="item-card">          <div class="item-image-container">          
-      
-    <img src="https://cdn.discordapp.com/attachments/1155423501205901312/1365994523540455494/file_2.gif?ex=680f5509&is=680e0389&hm=c09171ad8b855a0daa88c842ef45c6f95fb384be9a3097e80d0ed9d1ef4aa504&" alt="Red Lightning">          
-  </div>          
-  <div class="item-info">          
-    <div class="item-name">Red Lightning</div>          
-    <div class="item-price">FREE</div>          
-    <button class="buy-button" onclick="openItem('red-lightning')">Get for Free</button>          
-  </div>          
-</div>          
-<div class="item-card">          
-  <div class="item-image-container">          
-    <img src="https://cdn.discordapp.com/attachments/1155423501205901312/1365994567584841728/file.gif?ex=680f5513&is=680e0393&hm=2c9336f9663ed86ba600c44fa49bdcce77882920006d58ea4f6c2956ed659e29&" alt="Japan">          
-  </div>          
-  <div class="item-info">          
-    <div class="item-name">Japan</div>          
-    <div class="item-price">FREE</div>          
-    <button class="buy-button" onclick="openItem('japan')">Get for Free</button>          
-  </div>          
-</div>          
-<div class="item-card">          
-  <div class="item-image-container">          
-    <img src="https://cdn.discordapp.com/attachments/1155423501205901312/1365994545602367488/file_1.gif?ex=680f550e&is=680e038e&hm=6793c5b67399b511a360ec0145fba092021a8f18031523c7f65494ab25ce3ddc&" alt="Aesthetic fire Cloak">          
-  </div>          
-  <div class="item-info">          
-    <div class="item-name">Aesthetic fire</div>          
-    <div class="item-price">FREE</div>          
-    <button class="buy-button" onclick="openItem('aesthetic-fire')">Get for Free</button>          
-  </div>          
-</div>
-
-  </div>          
-</div>          <!-- Single Item Pages -->          <div id="red-lightning" class="single-item-page">          
-  <button class="back-button" onclick="goBack()">← Back</button>          
-  <div class="item-card">          
-    <div class="item-image-container">          
-      <img src="https://cdn.discordapp.com/attachments/1155423501205901312/1365994523540455494/file_2.gif?ex=680f5509&is=680e0389&hm=c09171ad8b855a0daa88c842ef45c6f95fb384be9a3097e80d0ed9d1ef4aa504&" alt="Red Lightning">          
-    </div>          
-    <div class="item-info">          
-      <div class="item-name">Red Lightning</div>          
-      <a href="https://www.mediafire.com/file/ziajhvym7tky0rn/red+lightning.mcpack/file" download class="buy-button">Download</a>          
-    </div>          
-  </div>          
-</div>          <div id="heart" class="single-item-page">          <button class="back-button" onclick="goBack()">← Back</button>
-
-  <div class="item-card">          
-    <div class="item-image-container">          
-      <img src="file.png" alt="heart-cloak">          
-    </div>          
-    <div class="item-info">          
-      <div class="item-name">Heart</div>          
-      <a href="file.png" download class="buy-button">Download</a>          
-    </div>          
-  </div>          
-</div>          <div id="japan" class="single-item-page">          
-  <button class="back-button" onclick="goBack()">← Back</button>          
-  <div class="item-card">          
-    <div class="item-image-container">          
-      <img src="https://cdn.discordapp.com/attachments/1155423501205901312/1365994567584841728/file.gif?ex=680f5513&is=680e0393&hm=2c9336f9663ed86ba600c44fa49bdcce77882920006d58ea4f6c2956ed659e29&" alt="Japan">          
-    </div>          
-    <div class="item-info">          
-      <div class="item-name">Japan</div>          
-      <a href="https://www.mediafire.com/file/l275n3s1l994w9f/japan.mcpack/file" download class="buy-button">Download</a>          
-    </div>          
-  </div>          
-</div>          <div id="aesthetic-fire" class="single-item-page">          
-  <button class="back-button" onclick="goBack()">← Back</button>          
-  <div class="item-card">          
-    <div class="item-image-container">          
-      <img src="https://cdn.discordapp.com/attachments/1155423501205901312/1365994545602367488/file_1.gif?ex=680f550e&is=680e038e&hm=6793c5b67399b511a360ec0145fba092021a8f18031523c7f65494ab25ce3ddc&" alt="Aesthetic Fire">          
-    </div>          
-    <div class="item-info">          
-      <div class="item-name">Aesthetic Fire</div>          
-      <a href="https://www.mediafire.com/file/1wlygu4ebhgm6vp/deivid.mcpack/file" download class="buy-button">Download</a>          
-    </div>          
-  </div>          
-</div>          <footer>          
-  © 2025 Origin Client. All rights reserved.          
-</footer>          
-<script>          
-  function scrollToSection(id) {          
-    document.getElementById(id).scrollIntoView({ behavior: 'smooth' });          
-  }          
-          
-  function openExpanded(id) {          
-    document.querySelectorAll('section, nav, footer, header').forEach(el => el.style.display = 'none');          
-    document.getElementById(id).style.display = 'block';          
-    window.scrollTo(0, 0);          
-  }          
-          
-  function openItem(id) {          
-    document.querySelectorAll('section, nav, footer, header, .expanded-area, .single-item-page').forEach(el => el.style.display = 'none');          
-    document.getElementById(id).style.display = 'block';          
-    window.scrollTo(0, 0);          
-  }          
-          
-  function goBack() {          
-    document.querySelectorAll('.expanded-area, .single-item-page').forEach(el => el.style.display = 'none');          
-    document.querySelectorAll('section, nav, footer, header').forEach(el => el.style.display = '');          
-    window.scrollTo(0, 0);          
-  }   
-  
-  function toggleDrawer() {
-  document.getElementById('drawer').classList.toggle('open');
+@media (max-width: 600px) {  
+  header { font-size: 1.7rem; }  
+  nav button { padding: 6px 12px; font-size: 0.9rem; }  
+  section { padding: 30px 16px; }  
+  .section-title { font-size: 1.5rem; }  
+  .item-card { border-radius: 10px; }  
+  .item-name { font-size: 1.1rem; }  
+  .buy-button { font-size: 0.9rem; }  
+  .expand-button { font-size: 1.3rem; }  
+  .item-image-container { height: 150px; }  
 }
 
-function openItem(itemId) {
-  alert('Open item: ' + itemId);
+  </style>  
+</head>  
+<body>  <header>  
+  <button class="drawer-button" onclick="toggleDrawer()">☰</button>  
+  Origin Client Store  
+</header>  <div class="drawer" id="drawer">  
+  <button class="drawer-close" onclick="toggleDrawer()">×</button>  
+  <a href="#cloaks" onclick="toggleDrawer()">Cloaks</a>  
+  <a href="#crowns" onclick="toggleDrawer()">Crowns</a>  
+  <a href="#shields" onclick="toggleDrawer()">Shields</a>  
+  <a href="#bandanas" onclick="toggleDrawer()">Bandanas</a>  
+  <a href="#horns" onclick="toggleDrawer()">Horns</a>  
+  <a href="#wings" onclick="toggleDrawer()">Wings</a>  
+</div>  <nav>  
+  <button onclick="scrollToSection('cloaks')">Cloaks</button>  
+  <button onclick="scrollToSection('crowns')">Crowns</button>  
+  <button onclick="scrollToSection('shields')">Shields</button>  
+  <button onclick="scrollToSection('bandanas')">Bandanas</button>  
+</nav>          <!-- MAIN STORE SECTIONS -->          <section id="cloaks" class="store-section">            
+  <div class="section-title">            
+    <span>Cloaks</span>            
+    <button class="expand-button" onclick="openExpanded('expanded-cloaks')">></button>            
+  </div>            
+  <div class="store-grid">            
+    <div class="item-card">            
+      <div class="item-image-container">            
+        <img src="file_2.gif" alt="Red Lightning Cloak">            
+      </div>            
+      <div class="item-info">            
+        <div class="item-name">Red Lightning Cloak</div>            
+        <div class="item-price">FREE</div>            
+        <button class="buy-button" onclick="openItem('red-lightning')">Get for Free</button>            
+      </div>            
+    </div>            
+    <div class="item-card">            
+      <div class="item-image-container">            
+        <img src="file.gif" alt="Japan Cloak">            
+      </div>            
+      <div class="item-info">            
+        <div class="item-name">Japan Cloak</div>            
+        <div class="item-price">FREE</div>            
+        <button class="buy-button" onclick="openItem('japan')">Get for Free</button>            
+      </div>            
+    </div>            
+    <div class="item-card">            
+      <div class="item-image-container">            
+        <img src="file_1.gif" alt="Aesthetic fire Cloak">            
+      </div>            
+      <div class="item-info">            
+        <div class="item-name">Aesthetic fire Cloak</div>            
+        <div class="item-price">FREE</div>            
+        <button class="buy-button" onclick="openItem('aesthetic-fire')">Get for Free</button>            
+      </div>            
+    </div>            
+  </div>            
+</section>
+<section id="wings" class="store-section">
+<div class="section-title">            
+    <span>wings</span>            
+    <button class="expand-button" onclick="openExpanded('expanded-wings')">></button>            
+  </div>            
+  <div class="store-grid">            
+    <div class="item-card">            
+      <div class="item-image-container">            
+        <img src="rw.png" alt="Red Wings">            
+      </div>            
+      <div class="item-info">            
+        <div class="item-name">Red Wings</div>            
+        <div class="item-price">FREE</div>            
+        <button class="buy-button" onclick="openItem('red-wings')">Get for Free</button>            
+      </div>            
+    </div>            
+    <div class="item-card">            
+      <div class="item-image-container">            
+        <img src="bw.png" alt="Blue wings">            
+      </div>            
+      <div class="item-info">            
+        <div class="item-name">Blue Wings</div>            
+        <div class="item-price">FREE</div>            
+        <button class="buy-button" onclick="openItem('blue-wings')">Get for Free</button>            
+      </div>            
+    </div>            
+    <div class="item-card">            
+      <div class="item-image-container">            
+        <img src="gw.png" alt="Grey Wings">            
+      </div>            
+      <div class="item-info">            
+        <div class="item-name">Grey Wings</div>            
+        <div class="item-price">FREE</div>            
+        <button class="buy-button" onclick="openItem('grey-wings')">Get for Free</button>            
+      </div>            
+    </div>            
+  </div>            
+</section>
+          <!-- Crowns Section -->          
+<section id="crowns" class="store-section">            
+  <div class="section-title">            
+    <span>Crowns</span>            
+    <button class="expand-button" onclick="openExpanded('expanded-crowns')">></button>            
+  </div>            
+  <div class="store-grid">            
+    <div class="item-card">            
+      <div class="item-image-container">            
+        <img src="https://cdn.discordapp.com/attachments/1157644511854460979/1367195094142160906/file_1.png?ex=6816fee7&is=6815ad67&hm=9284e959fe3329c3345da464dc3b79fcc5bb63760b227a8ee32bcfca8cf7b5b3&" alt="Golden Crown">            
+      </div>            
+      <div class="item-info">            
+        <div class="item-name">Golden Crown</div>            
+        <div class="item-price">FREE</div>            
+        <button class="buy-button" onclick="openItem('golden-crown')">Get for Free</button>            
+      </div>            
+    </div>            
+  </div>            
+</section>
+<section id="horns" class="store-section">            
+  <div class="section-title">            
+    <span>Horns</span>            
+    <button class="expand-button" onclick="openExpanded('expanded-horns')">></button>            
+  </div>            
+  <div class="store-grid">            
+    <div class="item-card">            
+      <div class="item-image-container">            
+        <img src="bh.png" alt="Black Horn">            
+      </div>            
+      <div class="item-info">            
+        <div class="item-name">Black Horn</div>            
+        <div class="item-price">FREE</div>            
+        <button class="buy-button" onclick="openItem('black-horn')">Get for Free</button>
+      </div>            
+    </div>            
+  </div>          
+<div class="item-card">            
+      <div class="item-image-container">            
+        <img src="ph.png" alt="Purple Horn">            
+      </div>            
+      <div class="item-info">            
+        <div class="item-name">Purple Horn</div>            
+        <div class="item-price">FREE</div>            
+        <button class="buy-button" onclick="openItem('purple-horn')">Get for Free</button>
+      </div>            
+    </div>          
+<div class="item-card">            
+      <div class="item-image-container">            
+        <img src="ah.png" alt="Aqua Horn">            
+      </div>            
+      <div class="item-info">            
+        <div class="item-name">Aqua Horn</div>            
+        <div class="item-price">FREE</div>            
+        <button class="buy-button" onclick="openItem('aqua-horn')">Get for Free</button>
+      </div>            
+    </div>            
+  </div>  
+</section>
+          <!-- Shields Section -->          <section id="shields" class="store-section">            
+  <div class="section-title">            
+    <span>Shields</span>            
+    <button class="expand-button" onclick="openExpanded('expanded-shields')">></button>            
+  </div>            
+  <div class="store-grid">            
+    <div class="item-card">            
+      <div class="item-image-container">            
+        <img src="midnightshield.png" alt="Midnight Shield">            
+      </div>            
+      <div class="item-info">            
+        <div class="item-name">Midnight Shield</div>            
+        <div class="item-price">FREE</div>            
+        <button class="buy-button" onclick="openItem('midnightshield')">Get for Free</button>            
+      </div>            
+    </div>            
+  </div>            
+</section>          <!-- Bandanas Section -->          <section id="bandanas" class="store-section">            
+  <div class="section-title">            
+    <span>Bandanas</span>            
+    <button class="expand-button" onclick="openExpanded('expanded-bandanas')">></button>            
+  </div>            
+  <div class="store-grid">            
+    <div class="item-card">            
+      <div class="item-image-container">            
+        <img src="badlionbandana.png" alt="Badlion Bandana">            
+      </div>            
+      <div class="item-info">            
+        <div class="item-name">Badlion Bandana</div>            
+        <div class="item-price">FREE</div>            
+        <button class="buy-button" onclick="openItem('badlionbandana')">Get for Free</button>            
+      </div>            
+    </div>            
+  </div>            
+</section>          <!-- EXPANDED SECTIONS -->          <div id="expanded-cloaks" class="expanded-area">            
+  <button class="back-button" onclick="goBack()">← Back</button>            
+  <h2>Cloaks</h2>            
+  <div class="store-grid">            
+    <div class="item-card">            
+      <div class="item-image-container">            
+        <img src="file.png" alt="Heart Cloak">            
+      </div>            
+      <div class="item-info">            
+        <div class="item-name">Heart Cloak</div>            
+        <div class="item-price">FREE</div>            
+        <button class="buy-button" onclick="openItem('heart')">Get for Free</button>            
+      </div>            
+    </div>            
+     <div class="item-card">          <div class="item-image-container">            <img src="file_2.gif" alt="Red Lightning">
+
+  </div>            
+  <div class="item-info">            
+    <div class="item-name">Red Lightning</div>            
+    <div class="item-price">FREE</div>            
+    <button class="buy-button" onclick="openItem('red-lightning')">Get for Free</button>            
+  </div>            
+</div>            
+<div class="item-card">            
+  <div class="item-image-container">            
+    <img src="file.gif" alt="Japan">            
+  </div>            
+  <div class="item-info">            
+    <div class="item-name">Japan</div>            
+    <div class="item-price">FREE</div>            
+    <button class="buy-button" onclick="openItem('japan')">Get for Free</button>            
+  </div>            
+</div>            
+<div class="item-card">            
+  <div class="item-image-container">            
+    <img src="file_1.gif" alt="Aesthetic fire Cloak">            
+  </div>            
+  <div class="item-info">            
+    <div class="item-name">Aesthetic fire</div>            
+    <div class="item-price">FREE</div>            
+    <button class="buy-button" onclick="openItem('aesthetic-fire')">Get for Free</button>            
+  </div>            
+</div>    </div>            
+</div>   
+<div id="expanded-wings" class="expanded-area">            
+  <button class="back-button" onclick="goBack()">← Back</button>            
+  <h2>Cloaks</h2>            
+  <div class="store-grid">            
+    <div class="item-card">            
+      <div class="item-image-container">            
+        <img src="bw.png" alt="Blue Wings">            
+      </div>            
+      <div class="item-info">            
+        <div class="item-name">Blue Wings</div>            
+        <div class="item-price">FREE</div>            
+        <button class="buy-button" onclick="openItem('blue-wings')">Get for Free</button>            
+      </div>            
+    </div>            
+     <div class="item-card">          
+<div class="item-image-container">            
+<img src="rw.png" alt="Red Wings">
+
+  </div>            
+  <div class="item-info">            
+    <div class="item-name">Red Wings</div>            
+    <div class="item-price">FREE</div>            
+    <button class="buy-button" onclick="openItem('red-wings')">Get for Free</button>            
+  </div>            
+</div>            
+<div class="item-card">            
+  <div class="item-image-container">            
+    <img src="cw.png" alt="Cyan Wings">            
+  </div>            
+  <div class="item-info">            
+    <div class="item-name">Cyan Wings</div>            
+    <div class="item-price">FREE</div>            
+    <button class="buy-button" onclick="openItem('cyan-wings')">Get for Free</button>            
+  </div>            
+</div>            
+<div class="item-card">            
+  <div class="item-image-container">            
+    <img src="gw.png" alt="grey Wings">            
+  </div>            
+  <div class="item-info">            
+    <div class="item-name">Grey Wings</div>            
+    <div class="item-price">FREE</div>            
+    <button class="buy-button" onclick="openItem('grey-wings')">Get for Free</button>            
+  </div>            
+</div> 
+<div class="item-card">            
+  <div class="item-image-container">            
+    <img src="pw.png" alt="Purple Wings">            
+  </div>            
+  <div class="item-info">            
+    <div class="item-name">Purple Wings</div>            
+    <div class="item-price">FREE</div>            
+    <button class="buy-button" onclick="openItem('purple-wings')">Get for Free</button>            
+  </div>            
+</div>    
+</div>            
+</div>    
+<div id="expanded-horns" class="expanded-area">            
+  <button class="back-button" onclick="goBack()">← Back</button>            
+  <h2>Horns</h2>            
+  <div class="store-grid">            
+    <div class="item-card">            
+      <div class="item-image-container">            
+        <img src="bh.png" alt="Black Horn">            
+      </div>            
+      <div class="item-info">            
+        <div class="item-name">Black Horn</div>            
+        <div class="item-price">FREE</div>            
+        <button class="buy-button" onclick="openItem('black-horn')">Get for Free</button>
+      </div>            
+    </div>
+<div class="item-card">            
+      <div class="item-image-container">            
+        <img src="ph.png" alt="Purple Horn">            
+      </div>            
+      <div class="item-info">            
+        <div class="item-name">Purple Horn</div>            
+        <div class="item-price">FREE</div>            
+        <button class="buy-button" onclick="openItem('purple-horn')">Get for Free</button>
+      </div>            
+    </div>            
+<div class="item-card">            
+      <div class="item-image-container">            
+        <img src="ah.png" alt="Aqua Horn">            
+      </div>            
+      <div class="item-info">            
+        <div class="item-name">Aqua Horn</div>            
+        <div class="item-price">FREE</div>            
+        <button class="buy-button" onclick="openItem('aqua-horn')">Get for Free</button>
+      </div>            
+    </div>  
+<div class="item-card">            
+      <div class="item-image-container">            
+        <img src="wh.png" alt="White Horn">            
+      </div>            
+      <div class="item-info">            
+        <div class="item-name">White Horn</div>            
+        <div class="item-price">FREE</div>            
+        <button class="buy-button" onclick="openItem('white-horn')">Get for Free</button>
+      </div>            
+    </div>            
+<div class="item-card">            
+      <div class="item-image-container">            
+        <img src="blh.png" alt="Blue Horn">            
+      </div>            
+      <div class="item-info">            
+        <div class="item-name">Blue Horn</div>            
+        <div class="item-price">FREE</div>            
+        <button class="buy-button" onclick="openItem('blue-horn')">Get for Free</button>
+      </div>            
+    </div>            
+  </div>
+</div>
+      <!-- Single Item Pages -->          <div id="red-lightning" class="single-item-page">            
+  <button class="back-button" onclick="goBack()">← Back</button>            
+  <div class="item-card">            
+    <div class="item-image-container">            
+      <img src="https://cdn.discordapp.com/attachments/1155423501205901312/1365994523540455494/file_2.gif?ex=680f5509&is=680e0389&hm=c09171ad8b855a0daa88c842ef45c6f95fb384be9a3097e80d0ed9d1ef4aa504&" alt="Red Lightning">            
+    </div>            
+    <div class="item-info">            
+      <div class="item-name">Red Lightning</div>            
+      <a href="https://www.mediafire.com/file/ziajhvym7tky0rn/red+lightning.mcpack/file" download class="buy-button">Download</a>            
+    </div>            
+  </div>            
+</div>
+<div id="golden-crown" class="single-item-page">            
+  <button class="back-button" onclick="goBack()">← Back</button>            
+  <div class="item-card">            
+    <div class="item-image-container">            
+      <img src="https://cdn.discordapp.com/attachments/1157644511854460979/1367195094142160906/file_1.png?ex=6816fee7&is=6815ad67&hm=9284e959fe3329c3345da464dc3b79fcc5bb63760b227a8ee32bcfca8cf7b5b3&" alt="Golden Crown">            
+    </div>            
+    <div class="item-info">            
+      <div class="item-name">Golden crown</div>            
+      <a href="https://drive.google.com/file/d/11GoJezBkplqLxwRcdqDmjfqcbxEFF5kN/view" download class="buy-button">Download</a>            
+    </div>            
+  </div>            
+</div>
+<div id="badlionbandana" class="single-item-page">            
+  <button class="back-button" onclick="goBack()">← Back</button>            
+  <div class="item-card">            
+    <div class="item-image-container">            
+      <img src="badlionbandana.png" alt="Badlion Bandana">            
+    </div>            
+    <div class="item-info">            
+      <div class="item-name">Badlion Bandana</div>            
+      <a href="https://www.mediafire.com/file/h18lcfy4fuqjmpr/badlion+bandana.mcpack/file" download class="buy-button">Download</a>            
+    </div>            
+  </div>            
+</div>
+<div id="midnightshield" class="single-item-page">            
+  <button class="back-button" onclick="goBack()">← Back</button>            
+  <div class="item-card">            
+    <div class="item-image-container">            
+      <img src="midnightshield.png" alt="Badlion Bandana">            
+    </div>            
+    <div class="item-info">            
+      <div class="item-name">Midnight Shield</div>            
+      <a href="https://www.mediafire.com/file/qn2mc6dz447x56t/xqiimidnight.mcpack/file" download class="buy-button">Download</a>            
+    </div>            
+  </div>            
+</div>          <div id="heart" class="single-item-page">          <button class="back-button" onclick="goBack()">← Back</button>    <div class="item-card">            
+    <div class="item-image-container">            
+      <img src="file.png" alt="heart-cloak">            
+    </div>            
+    <div class="item-info">            
+      <div class="item-name">Heart</div>            
+      <a href="file.png" download class="buy-button">Download</a>            
+    </div>            
+  </div>            
+</div>          <div id="japan" class="single-item-page">            
+  <button class="back-button" onclick="goBack()">← Back</button>            
+  <div class="item-card">            
+    <div class="item-image-container">            
+      <img src="https://cdn.discordapp.com/attachments/1155423501205901312/1365994567584841728/file.gif?ex=680f5513&is=680e0393&hm=2c9336f9663ed86ba600c44fa49bdcce77882920006d58ea4f6c2956ed659e29&" alt="Japan">            
+    </div>            
+    <div class="item-info">            
+      <div class="item-name">Japan</div>            
+      <a href="https://www.mediafire.com/file/l275n3s1l994w9f/japan.mcpack/file" download class="buy-button">Download</a>            
+    </div>            
+  </div>            
+</div>          <div id="aesthetic-fire" class="single-item-page">            
+  <button class="back-button" onclick="goBack()">← Back</button>            
+  <div class="item-card">            
+    <div class="item-image-container">            
+      <img src="https://cdn.discordapp.com/attachments/1155423501205901312/1365994545602367488/file_1.gif?ex=680f550e&is=680e038e&hm=6793c5b67399b511a360ec0145fba092021a8f18031523c7f65494ab25ce3ddc&" alt="Aesthetic Fire">            
+    </div>            
+    <div class="item-info">            
+      <div class="item-name">Aesthetic Fire</div>            
+      <a href="https://www.mediafire.com/file/1wlygu4ebhgm6vp/deivid.mcpack/file" download class="buy-button">Download</a>            
+    </div>            
+  </div>            
+</div>
+<div id="black-horn" class="single-item-page">            
+  <button class="back-button" onclick="goBack()">← Back</button>            
+  <div class="item-card">            
+    <div class="item-image-container">            
+      <img src="bh.png" alt="blackhorns">            
+    </div>            
+    <div class="item-info">            
+      <div class="item-name">Black Horns</div>            
+      <a href="https://www.mediafire.com/file/3sw00breui6ib01/Black_Horn.mcpack/file" download class="buy-button">Download</a>            
+    </div>            
+  </div>            
+</div>
+<div id="purple-horn" class="single-item-page">            
+  <button class="back-button" onclick="goBack()">← Back</button>            
+  <div class="item-card">            
+    <div class="item-image-container">            
+      <img src="ph.png" alt="purple horns">            
+    </div>            
+    <div class="item-info">            
+      <div class="item-name">Purple Horns</div>            
+      <a href="https://www.mediafire.com/file/75h6lnqpxgxjhg9/purple_horn.mcpack/file" download class="buy-button">Download</a>            
+    </div>            
+  </div>            
+</div>
+<div id="aqua-horn" class="single-item-page">            
+  <button class="back-button" onclick="goBack()">← Back</button>            
+  <div class="item-card">            
+    <div class="item-image-container">            
+      <img src="ah.png" alt="Aqua horns">            
+    </div>            
+    <div class="item-info">            
+      <div class="item-name">Aqua Horns</div>            
+      <a href="https://www.mediafire.com/file/66kdl8b0z8knl51/aqua_horn.mcpack/file" download class="buy-button">Download</a>            
+    </div>            
+  </div> 
+</div>
+<div id="blue-horn" class="single-item-page">            
+  <button class="back-button" onclick="goBack()">← Back</button>            
+  <div class="item-card">            
+    <div class="item-image-container">            
+      <img src="blh.png" alt="Blue horns">            
+    </div>            
+    <div class="item-info">            
+      <div class="item-name">Blue Horns</div>            
+      <a href="https://www.mediafire.com/file/0xsnexgx1qtp4j9/blue_horn.mcpack/file" download class="buy-button">Download</a>            
+    </div>            
+  </div>            
+</div>
+<div id="white-horn" class="single-item-page">            
+  <button class="back-button" onclick="goBack()">← Back</button>            
+  <div class="item-card">            
+    <div class="item-image-container">            
+      <img src="wh.png" alt="White horns">            
+    </div>            
+    <div class="item-info">            
+      <div class="item-name">Aqua Horns</div>            
+      <a href="https://www.mediafire.com/file/0yqy1w65isz2ubw/white_horn.mcpack/file" download class="buy-button">Download</a>            
+    </div>            
+  </div>            
+</div>
+<div id="cyan-wings" class="single-item-page">            
+  <button class="back-button" onclick="goBack()">← Back</button>            
+  <div class="item-card">            
+    <div class="item-image-container">            
+      <img src="cw.png" alt="Cyan wings">            
+    </div>            
+    <div class="item-info">            
+      <div class="item-name">Cyan Wings</div>            
+      <a href="https://www.mediafire.com/file/9m9sk0dv9kl59me/Animated_Wings_cyan.mcpack/file" download class="buy-button">Download</a>            
+    </div>            
+  </div>            
+</div>
+<div id="purple-wings" class="single-item-page">            
+  <button class="back-button" onclick="goBack()">← Back</button>            
+  <div class="item-card">            
+    <div class="item-image-container">            
+      <img src="pw.png" alt="purple wings">            
+    </div>            
+    <div class="item-info">            
+      <div class="item-name">Purple Wings</div>            
+      <a href="https://www.mediafire.com/file/20436cqgldca8km/Animated_Wings_Purple.mcpack/file" download class="buy-button">Download</a>            
+    </div>            
+  </div>            
+</div>
+<div id="red-wings" class="single-item-page">            
+  <button class="back-button" onclick="goBack()">← Back</button>            
+  <div class="item-card">            
+    <div class="item-image-container">            
+      <img src="rw.png" alt="red wings">            
+    </div>            
+    <div class="item-info">            
+      <div class="item-name">Red wings</div>            
+      <a href="https://www.mediafire.com/file/gfy31vri4hnx11e/Animated_Wings_Red.mcpack/file" download class="buy-button">Download</a>            
+    </div>            
+  </div> 
+</div>
+<div id="grey-wings" class="single-item-page">            
+  <button class="back-button" onclick="goBack()">← Back</button>            
+  <div class="item-card">            
+    <div class="item-image-container">            
+      <img src="gw.png" alt="Blue horns">            
+    </div>            
+    <div class="item-info">            
+      <div class="item-name">Grey Wings</div>            
+      <a href="https://www.mediafire.com/file/trabm6crpin4zks/Animated_Wings_Grey.mcpack/file" download class="buy-button">Download</a>            
+    </div>            
+  </div>            
+</div>
+<div id="blue-wings" class="single-item-page">            
+  <button class="back-button" onclick="goBack()">← Back</button>            
+  <div class="item-card">            
+    <div class="item-image-container">            
+      <img src="bw.png" alt="Blue wings">            
+    </div>            
+    <div class="item-info">            
+      <div class="item-name">Blue Wings</div>            
+      <a href="https://www.mediafire.com/file/m4fnm2iyzxnxn0i/Animated_Wings_blue.mcpack/file" download class="buy-button">Download</a>            
+    </div>            
+  </div>            
+</div>          
+<footer>            
+  © 2025 Origin Client. All rights reserved.            
+</footer>            
+<script>            
+  function scrollToSection(id) {            
+    document.getElementById(id).scrollIntoView({ behavior: 'smooth' });            
+  }            function openExpanded(id) {
+document.querySelectorAll('section, nav, footer, header').forEach(el => el.style.display = 'none');
+document.getElementById(id).style.display = 'block';
+window.scrollTo(0, 0);
 }
-</script>          </body>          
+
+function openItem(id) {
+document.querySelectorAll('section, nav, footer, header, .expanded-area, .single-item-page').forEach(el => el.style.display = 'none');
+document.getElementById(id).style.display = 'block';
+window.scrollTo(0, 0);
+}
+
+function goBack() {
+document.querySelectorAll('.expanded-area, .single-item-page').forEach(el => el.style.display = 'none');
+document.querySelectorAll('section, nav, footer, header').forEach(el => el.style.display = '');
+window.scrollTo(0, 0);
+}
+
+function toggleDrawer() {
+document.getElementById('drawer').classList.toggle('open');
+}
+
+</script>          </body>
+
 </html>
